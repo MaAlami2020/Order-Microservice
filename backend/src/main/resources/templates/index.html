@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/bulma.min.css">
+    <link rel="stylesheet" href="/css/material-design-iconic-font.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Avenue Fashion</title>
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav class="navbar-top">
+            <ul class="navbar-top-ul">
+                <li class="navbar-top-orders">
+                    <!--<a href="login.html" class="navbar-top-links">Registro</a>-->
+                </li>
+                <li class="navbar-top-orders">
+                    <!--<a href="login.html" class="navbar-top-links">Iniciar sesión</a>-->
+                </li>
+            </ul>
+        </nav>
+        <nav class="navbar">
+            <nav class="nav-menu --nav-dark" id="mySidenav">
+                <a class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark" href="//localhost:8443/">Avenue Fashion</a>
+                <ul class="nav-menu-ul">
+                    <div class="user-img">
+                        <img src=/databases/{{username}}/image alt="" width="50" height="50"></img>
+                    </div>
+                </ul>
+                <!--orderss listing-->     
+            </nav>
+        </nav>
+    </header>
+    <div class="banner banner-second">
+        <div class="banner-container ">
+        </div>
+    </div>
+
+    <!-- Sección de fotografías -->
+    <div class="container">
+
+        <div class="topbar-filter fw">
+			<p id="total-order"></p>
+		</div>
+        <!--orderss listing-->
+        <div class="columns is-mobile is-multiline" id="orderListing">
+            <!--orderss info-->
+        </div>
+        <div class="page-single">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                        <ul class="pagination">               
+                            <li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results</button></li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+<!--pagination-->
+    
+<!--spinner-->    
+    <div id="spinner-div" class="pt-5">
+        <div class="spinner-border text-primary" role="status">
+        </div>
+    </div>
+
+    <!--<div id="plotlyChart" width="400" height="150"></div>-->
+
+    <footer class="footer">     
+        <div class="footer-bar-top">
+            <li class="footer-bar-top-links">2024 Avenue Fashion</li>
+        </div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    
+</body>
+<script>
+    var tam=10;
+    var tam1;
+
+    let ruta='//localhost:8445/databases/orders/user/{{username}}?size='+tam;
+
+    function loadInitOrders(callback,tam){
+        $.ajax({
+            url:ruta
+        }).done(function (orders){    
+            callback(orders);
+        }) 
+    }
+
+    function showOrderLoaded(order){
+        $('#orderListing').append(
+            '<div class="column is-half-mobile is-one-quarter-desktop"><div class="card"><a href="#"><img src="/img/no_image.png" alt="" width="200" height="200"><div class="card-simple-options"><a href="/orders/'
+            + order.id + '" class="btn btn--mini-rounded"><div class="columns is-multiline"><div class="column is-full is-marginless">VIEW ORDER</div></div></a></div><div class="card-info"></div></a></div></div>'
+        )
+    }
+
+    $(document).ready(function() {
+        //first 10 orderss
+        loadInitOrders(function(orders, tam) {
+            $('#total-order').append('<span>' + orders.totalElements + ' orders</span> in total')
+            
+            if(orders.size != 0){
+                for(var i=0; i<orders.totalElements; i++){
+                    showOrderLoaded(orders.content[i]);
+                }
+            }
+        });
+
+
+        //pagination
+        $('.pagination').click(function() {
+            tam+=10;
+
+            let ruta='//localhost:8443/databases/orders/user/{{username}}?size='+tam;
+
+            $('#spinner-div').show();
+            $.ajax({
+                url:ruta
+            }).done(function(orders){
+                $('#spinner-div').hide();
+                if(orders.totalElements != 0 && tam-10 < orders.content.length){
+                    for(var i=tam-10; i<orders.content.length; i++){
+                    
+                        showOrderLoaded(orders.content[i]);
+                    }
+                }
+            })
+        })
+    });
+
+</script>
+</html>
