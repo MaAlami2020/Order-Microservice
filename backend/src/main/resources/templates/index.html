@@ -29,7 +29,7 @@
                 <a class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark" href="//localhost:8443/">Avenue Fashion</a>
                 <ul class="nav-menu-ul">
                     <div class="user-img">
-                        <img src=/databases/{{username}}/image alt="" width="50" height="50"></img>
+                        <img src=//localhost:8443/api/users/{{id}}/image alt="" width="50" height="50"></img>
                     </div>
                 </ul>
                 <!--orderss listing-->     
@@ -88,7 +88,7 @@
     var tam=10;
     var tam1;
 
-    let ruta='//localhost:8445/databases/orders/user/{{username}}?size='+tam;
+    let ruta='//localhost:8443/api/orders/user/{{id}}?size='+tam;
 
     function loadInitOrders(callback,tam){
         $.ajax({
@@ -109,7 +109,7 @@
         //first 10 orderss
         loadInitOrders(function(orders, tam) {
             $('#total-order').append('<span>' + orders.totalElements + ' orders</span> in total')
-            
+            console.log(orders);
             if(orders.size != 0){
                 for(var i=0; i<orders.totalElements; i++){
                     showOrderLoaded(orders.content[i]);
@@ -122,7 +122,7 @@
         $('.pagination').click(function() {
             tam+=10;
 
-            let ruta='//localhost:8443/databases/orders/user/{{username}}?size='+tam;
+            let ruta='//localhost:8443/api/orders/user/{{id}}?size='+tam;
 
             $('#spinner-div').show();
             $.ajax({

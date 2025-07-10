@@ -1,11 +1,15 @@
 package com.example.webapp1a.controller;
 
 import java.util.Optional;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +27,7 @@ import com.example.webapp1a.service.UserService;
 
 
 @RestController
-@RequestMapping("/databases")
+@RequestMapping("/api/orders")
 public class OrderRestController {
 
     @Autowired
@@ -35,22 +39,13 @@ public class OrderRestController {
     @Autowired
     private ItemToBuyService itemToBuyService;
 
-    @GetMapping("/orders")
+    @GetMapping("/")
     public Page<Order> getOrders(Pageable page) {
         return orderService.findAll(page);
     }
 
-    @GetMapping("/orders/user/{username}")
-    public ResponseEntity<Page<Order>> getOrdersByUser(@PathVariable String username, Pageable page) {
-        Optional<User> user = userService.findByUsername(username);
-        if(user.isPresent()) {
-            return new ResponseEntity<>(orderService.findByUser(user.get(),page),HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
-    @GetMapping("/orders/{id}/items")
+    @GetMapping("/{id}/items")
     public ResponseEntity<List<ItemToBuy>> getItemsByOrder(@PathVariable Integer id) {
         Optional<Order> order = orderService.findById(id);
 
@@ -58,16 +53,6 @@ public class OrderRestController {
             return new ResponseEntity<>(itemToBuyService.findByOrder(order.get()), HttpStatus.OK);
         } 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/orders/{ident}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Integer ident) {
-        Optional<Order> order = orderService.findById(ident);
-
-        if(order.isPresent()) {
-            return ResponseEntity.ok(order.get());
-        } 
-        return ResponseEntity.notFound().build();
     }
 
     

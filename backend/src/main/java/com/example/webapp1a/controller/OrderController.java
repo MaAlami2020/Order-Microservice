@@ -1,12 +1,16 @@
 package com.example.webapp1a.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,11 +39,10 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     
-    @GetMapping("/user/{username}")
-    public String getUserOrders(Model model, @PathVariable String username){
-        model.addAttribute("username",username);
+    @GetMapping("/user/{id}")
+    public String getUserOrders(Model model, @PathVariable Integer id){
+        model.addAttribute("id",id);
         return "index";
-        //return "adminIndex";
     }
     
 
