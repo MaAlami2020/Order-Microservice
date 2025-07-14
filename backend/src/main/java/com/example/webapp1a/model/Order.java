@@ -1,8 +1,8 @@
 package com.example.webapp1a.model;
 
 import java.time.LocalDate;
-//import java.util.List;
-//import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,9 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-//import javax.persistence.OneToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tbl_order")
@@ -22,22 +23,26 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne
+    private String code;
+
+    @ManyToOne 
+    @JsonIgnore
     private User user;
 
-    //@OneToMany
-    //private List<ItemToBuy> itemsToBuy = new ArrayList<>();
+    @OneToMany(mappedBy = "order")
+    private List<ItemToBuy> itemToBuy = new ArrayList<>();
+
 
     @Column(name="totalCost")
     private Double totalCost;
 
     @Column(name="date")
-    private LocalDate creationDate;
+    private LocalDate creationDate;//AAAA-MM-DD
 
     @Column(name="state")
     private State state;
 
-    private String auxState;
+    //private String auxState;
 
     public Order(){}
 
@@ -53,6 +58,14 @@ public class Order {
         return id;
     }
 
+    public void setCode(String code){
+        this.code = code;
+    }
+
+    public String getCode(){
+        return code;
+    }
+
     public void setUser(User user){
         this.user = user;
     }
@@ -60,26 +73,20 @@ public class Order {
     public User getUser(){
         return user;
     }
-    
-    /*no cascade
-    public void setItemsToBuy(List<ItemToBuy> items){
-        this.itemsToBuy = items;
+
+    public void addItemToBuy(ItemToBuy item){
+        itemToBuy.add(item);
+        item.setOrder(this);
     }
 
-    public List<ItemToBuy> getItemsToBuy(){
-        return itemsToBuy;
-    }*/
-
-    /*bidirectional relationship with cascade
-    public void addItemToBuy(ItemToBuy itemToBuy){
-        itemsToBuy.add(itemToBuy);
-        itemToBuy.setOrder(this);
+    public void removeItemToBuy(ItemToBuy item){
+        itemToBuy.remove(item);
+        item.setOrder(null);
     }
 
-    public void removeItemToBuy(ItemToBuy itemToBuy){
-        itemsToBuy.remove(itemToBuy);
-        itemToBuy.setOrder(null);
-    }*/
+    public List<ItemToBuy> getItemToBuys(){
+        return itemToBuy;
+    }
 
     public void setTotalCost(Double totalCost){
         this.totalCost = totalCost;
@@ -103,13 +110,5 @@ public class Order {
 
     public State getState(){
         return state;
-    }
-
-    public void setAuxState(String state){
-        this.auxState = state;
-    }
-
-    public String getAuxState(){
-        return auxState;
     }
 }

@@ -1,16 +1,12 @@
 package com.example.webapp1a.controller;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -76,7 +72,7 @@ public class OrderController {
 
     @PostMapping("/{ident}/admin/update")
     public String updateOrderState(Model model, @PathVariable Integer ident, Order order) {
-        orderService.update(ident,order);
+        //orderService.update(ident,order);
         model.addAttribute("updatedOrder","order successfully updated");
         return "orderAdmin";
     }
@@ -99,7 +95,7 @@ public class OrderController {
        
             double cost=0;
             for(ItemToBuy item: itemsToBuy){
-                cost += item.getItem().getPrice();
+                cost += item.getItems().get(0).getPrice();
                 item.setOrder(order);
                 item.setShoppingCart(null);
             }

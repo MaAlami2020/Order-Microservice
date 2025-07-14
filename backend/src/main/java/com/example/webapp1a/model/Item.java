@@ -3,8 +3,10 @@ package com.example.webapp1a.model;
 import java.sql.Blob;
 import java.util.*;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,16 +15,18 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tbl_item")   
 public class Item {
-
-    private static final Integer NUM = 4; 
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id; 
+
+    private String code;
 
     @Column(name = "name")
     private String name;
@@ -43,78 +47,55 @@ public class Item {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "sizes")
-    private String[] sizes = new String[NUM];
-
-    @Column(name = "stocks")
-    private Integer[] stocks = new Integer[NUM];
-
-    private Integer stock;
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
+    private List<Stock<?>> itemStocks;
 
     @ManyToMany
-    @Column(name = "fav")
-    private List<User> favouritesUsers = new ArrayList<>();
+    @JsonIgnore
+    private List<ItemToBuy> itemsToBuy = new ArrayList<>();
 
-    @OneToMany(mappedBy="item")
-    private List<ItemToBuy> itemsToBuy;
+    @ManyToMany
+    @JsonIgnore
+    private List<User> users = new ArrayList<>();
 
 
     public Item(){
-        Arrays.fill(stocks, 0);
     }
 
-    public void setSizes(String [] size){
-        this.sizes = size;
+
+    public void setStock(Stock<?> stock){
+        itemStocks.add(stock);
+        stock.setItem(this);
+    }
+
+    public void removeStock(Stock<?> stock){
+        itemStocks.remove(stock);
+        stock.setItem(null);
+    }
+
+    public List<Stock<?>> getStocks(){
+        return itemStocks;
+    }
+
+    public List<ItemToBuy> getITeItemsToBuy(){
+        return itemsToBuy;
+    }
+
+    public void setUsers(List<User> favourites){
+        this.users=favourites;
+    }
+
+    public List<User> getUsers(){
+        return users;
+    }
+
+    public void setCode(String code){
+        this.code=code;
     }
     
-    public String [] getSizes(){
-        return sizes;
+    public String getCode(){
+        return code;
     }
-
-    public void setStock(Integer stock){
-        this.stock = stock;
-    }
-    
-    public Integer getStock(){
-        return stock;
-    }
-
-    public void setStocks(Integer [] stock){
-        this.stocks = stock;
-    }
-
-    public Integer [] getStocks(){
-        return stocks;
-    }
-
-    public void addItemToBuy(ItemToBuy itemToBuy){
-        itemsToBuy.add(itemToBuy);
-        itemToBuy.setItem(this);
-    }
-
-    public void removeItemToBuy(ItemToBuy itemToBuy){
-        itemsToBuy.remove(itemToBuy);
-        itemToBuy.setItem(null);
-    }
-
-    //complete users listing
-    public List<User> getFavouritesUsers(){
-        return favouritesUsers;
-    }
-
-    public void setFavouritesUsers(List<User> favourites){
-        this.favouritesUsers = favourites;
-    }
-
-    /*addition of a particular user
-    public void addUser(User user){
-        this.favouritesUsers.add(user);
-        user.setItem(this);
-    }
-
-    public void removeUser(User favouriteUser){
-        this.favourites.remove(favouriteUser);
-    }*/
 
     public void setName(String name){
         this.name = name;
