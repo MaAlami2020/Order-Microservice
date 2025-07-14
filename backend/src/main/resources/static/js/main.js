@@ -38,7 +38,6 @@ for (var i = 0; i < submenu.length; i++) {
 let activeImg = 0
 function slider(n) {
     let images = document.getElementsByClassName("slider-img-container")
-
     for (i = 0; i < images.length; i++) {
 
         if (images[i].className.includes("active")) {
@@ -49,7 +48,7 @@ function slider(n) {
     }
 
     activeImg = n
-    images[n].className += " active"
+    images[n].className += " active"    
 }
 
 function next(n) {
@@ -63,7 +62,7 @@ function next(n) {
 function previus(n) {
     activeImg--
     if (activeImg <= 0) {
-        activeImg = n
+        activeImg = 0
     }
     slider(activeImg)
 }

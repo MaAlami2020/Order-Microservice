@@ -37,8 +37,8 @@ public class UserService {
         if(!user.get().getOrders().contains(newOrder)){
             newUser.getOrders().add(newOrder);
         }
-        for(Item item: user.get().getFavouritesItems()){
-            newUser.getFavouritesItems().add(item);
+        for(Item item: user.get().getItems()){
+            newUser.getItems().add(item);
         }
         for(Order order: user.get().getOrders()){
             newUser.getOrders().add(order);

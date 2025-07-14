@@ -9,8 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "tbl_cart")
 public class ShoppingCart {
 
     @Id
@@ -18,11 +22,12 @@ public class ShoppingCart {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(mappedBy="shoppingCart")
+    @JsonIgnore
     private User user;
     
     @Column(name = "totalCost")
-    private Double totalCost;
+    private Double totalCost = 0.0;
 
     @OneToMany(mappedBy="shoppingCart")
     private List<ItemToBuy> items; 
@@ -61,5 +66,9 @@ public class ShoppingCart {
 
     public Double getTotalCost(){
         return totalCost;
+    }
+
+    public List<ItemToBuy> getItems() {
+        return items;
     }
 }

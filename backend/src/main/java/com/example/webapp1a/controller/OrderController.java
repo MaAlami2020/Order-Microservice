@@ -35,11 +35,10 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     
-    @GetMapping("/user/{username}")
-    public String getUserOrders(Model model, @PathVariable String username){
-        model.addAttribute("username",username);
+    @GetMapping("/user/{id}")
+    public String getUserOrders(Model model, @PathVariable Integer id){
+        model.addAttribute("id",id);
         return "index";
-        //return "adminIndex";
     }
     
 
@@ -73,7 +72,7 @@ public class OrderController {
 
     @PostMapping("/{ident}/admin/update")
     public String updateOrderState(Model model, @PathVariable Integer ident, Order order) {
-        orderService.update(ident,order);
+        //orderService.update(ident,order);
         model.addAttribute("updatedOrder","order successfully updated");
         return "orderAdmin";
     }
@@ -96,7 +95,7 @@ public class OrderController {
        
             double cost=0;
             for(ItemToBuy item: itemsToBuy){
-                cost += item.getItem().getPrice();
+                cost += item.getItems().get(0).getPrice();
                 item.setOrder(order);
                 item.setShoppingCart(null);
             }

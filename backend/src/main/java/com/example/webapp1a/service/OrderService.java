@@ -34,7 +34,7 @@ public class OrderService {
         return orderRepo.findByUser(user, page);
     }
 
-    public void update(Integer id, Order newOrder){
+    /*public void update(Integer id, Order newOrder){
         Optional<Order> order = orderRepo.findById(id);
 
         newOrder.setTotalCost(order.get().getTotalCost());
@@ -52,6 +52,6 @@ public class OrderService {
 
         newOrder.setId(id);
         orderRepo.save(newOrder);
-    }
+    }*/
     
 }

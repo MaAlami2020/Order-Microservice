@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.webapp1a.model.ItemToBuy;
-import com.example.webapp1a.model.Order;
 import com.example.webapp1a.model.ShoppingCart;
 import com.example.webapp1a.repository.ItemToBuyRepo;
 
@@ -20,7 +19,5 @@ public class ItemToBuyService {
         return itemToBuyRepo.findByShoppingCart(shoppingCart);
     }
     
-    public List<ItemToBuy> findByOrder(Order order){
-        return itemToBuyRepo.findByOrder(order);
-    }
+    
 }
