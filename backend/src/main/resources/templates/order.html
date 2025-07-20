@@ -62,7 +62,10 @@
 </body>
 <script>
 
-    let ruta='//localhost:8443/api/orders/{{ident}}';
+    let ruta='//localhost:8443/api/orders/{{id}}';
+
+    var stock = "";
+    
 
     function loadOrder(callback){
         $.ajax({
@@ -77,11 +80,9 @@
         )
     }
 
-    function showFirstItem(itemToBuy){           
-        console.log(itemToBuy);
-        var stock = "";
+    function showFirstItem(itemToBuy){   
         if(itemToBuy.items[0].stocks[0].stock >= 5){
-           stock = "In stock"; 
+            stock = "In stock"; 
         } else {
             stock = "less than 5 items avaialables";
         }
@@ -90,19 +91,22 @@
             '/image" alt="camiseta" width="200" height="200"></div></div><h3 class="is-size-4">' + itemToBuy.items[0].name +
             '</h3><h2 class="price is-size-4">' + itemToBuy.items[0].price + '<sup>€</sup></h2><div class="column"><p class="has-text-grey"><strong>Availability: </strong>' + stock + '</p><p class="has-text-grey"><strong>Gender: </strong>' + itemToBuy.items[0].gender + 
             '</p><p class="has-text-grey"><strong>Size: </strong>' + itemToBuy.size + '</p><p class="has-text-grey"><strong>Type: </strong>' + itemToBuy.items[0].type + 
-            '</p><p class="has-text-grey"><strong>Amount: </strong>' + itemToBuy.count + '</p></div><p class="text-default">' + itemToBuy.items[0].description + 
-            '</p></div>'
+            '</p><p class="has-text-grey"><strong>Amount: </strong>' + itemToBuy.count + '</p></div><p class="text-default">' + itemToBuy.items[0].description + '</p></div>'
         )
     }
 
-    function showOtherItems(items){
+    function showOtherItems(itemToBuy){
+        if(itemToBuy.items[0].stocks[0].stock >= 5){
+            stock = "In stock"; 
+        } else {
+            stock = "less than 5 items avaialables";
+        }
         $('.slider').append(
-            '<div class="slider-img-container"><div class="column"><div class="card"><img src="//localhost:8443/databases/items/' + items.item.id + 
-            '/image" alt="camiseta" width="200" height="200"></div></div><h3 class="is-size-4">' + items.item.name +
-            '</h3><h2 class="price is-size-4">' + items.item.price + '€<sup></sup></h2><div class="column"><p class="has-text-grey"><strong>Availability:</strong> In stock</p><p class="has-text-grey"><strong>Gender: </strong>' + items.item.gender + 
-            '</p><p class="has-text-grey"><strong>Size: </strong>' + items.size + 
-            '</p><p class="has-text-grey"><strong>Type: </strong>' + items.item.type + '</p><p class="has-text-grey"><strong>Amount: </strong>' + items.count + '</p></div><p class="text-default">' + items.item.description + 
-            '</p></div>'
+            '<div class="slider-img-container"><div class="column"><div class="card"><img src="//localhost:8443/api/items/' + itemToBuy.items[0].id + 
+            '/image" alt="camiseta" width="200" height="200"></div></div><h3 class="is-size-4">' + itemToBuy.items[0].name +
+            '</h3><h2 class="price is-size-4">' + itemToBuy.items[0].price + '€<sup></sup></h2><div class="column"><p class="has-text-grey"><strong>Availability:</strong>' + stock + '</p><p class="has-text-grey"><strong>Gender: </strong>' + itemToBuy.items[0].gender + 
+            '</p><p class="has-text-grey"><strong>Size: </strong>' + itemToBuy.size + '</p><p class="has-text-grey"><strong>Type: </strong>' + itemToBuy.items[0].type + 
+            '</p><p class="has-text-grey"><strong>Amount: </strong>' + itemToBuy.count + '</p></div><p class="text-default">' + itemToBuy.items[0].description + '</p></div>'
         )
     }
 

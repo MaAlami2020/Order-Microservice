@@ -76,8 +76,19 @@ public class Item {
     public List<Stock<?>> getStocks(){
         return itemStocks;
     }
+    
 
-    public List<ItemToBuy> getITeItemsToBuy(){
+    /*public void addItemToBuy(ItemToBuy itemToBuy){
+        itemsToBuy.add(itemToBuy);
+        itemToBuy.setItem(this);
+    }
+
+    public void removeItemToBuy(ItemToBuy itemToBuy){
+        itemsToBuy.remove(itemToBuy);
+        itemToBuy.setItem(null);
+    }*/
+
+    public List<ItemToBuy> getItemsToBuy(){
         return itemsToBuy;
     }
 

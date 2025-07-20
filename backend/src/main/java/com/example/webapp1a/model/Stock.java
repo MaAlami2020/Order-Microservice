@@ -81,3 +81,4 @@ public abstract class Stock<T> {
         return size;
     }
 }
+

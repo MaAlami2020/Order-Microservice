@@ -15,6 +15,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
+
+
 @Entity
 @Table(name = "tbl_order")
 public class Order {
@@ -37,7 +40,7 @@ public class Order {
     private Double totalCost;
 
     @Column(name="date")
-    private LocalDate creationDate;//AAAA-MM-DD
+    private String creationDate;
 
     @Column(name="state")
     private State state;
@@ -96,11 +99,11 @@ public class Order {
         return totalCost;
     }
 
-    public void setCreationDate(LocalDate creationDate){
+    public void setCreationDate(String creationDate){
         this.creationDate = creationDate;
     }
 
-    public LocalDate getCreationDate(){
+    public String getCreationDate(){
         return creationDate;
     }
 

@@ -1,5 +1,6 @@
 package com.example.webapp1a.service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.webapp1a.model.Order;
-import com.example.webapp1a.model.Order.State;
-import com.example.webapp1a.model.User;
 import com.example.webapp1a.repository.OrderRepo;
 
 @Service
@@ -30,10 +29,13 @@ public class OrderService {
         return orderRepo.findById(id);
     }
 
-    public Page<Order> findByUser(User user, Pageable page){
-        return orderRepo.findByUser(user, page);
+    public Page<Order> findByName(String name, Pageable page){
+        return orderRepo.findByName(name, page);
     }
 
+    public Page<Order> findByDate(String date, Pageable page){
+        return orderRepo.findByDate(date, page);
+    }
     /*public void update(Integer id, Order newOrder){
         Optional<Order> order = orderRepo.findById(id);
 

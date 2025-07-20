@@ -6,13 +6,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "tbl_direction")
 public class Direction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
     @Column(name = "street")
     private String street;
@@ -26,8 +30,9 @@ public class Direction {
     @Column(name = "city")
     private String city;
 
+    
+    @JsonIgnore
     @OneToOne(mappedBy = "direction")
-    //@JsonIgnore
     private User user;
 
     public Direction(){}
@@ -38,6 +43,14 @@ public class Direction {
         this.number=number;
         this.zipCode=zipCode;
         this.city=city;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setStreet(String street){
