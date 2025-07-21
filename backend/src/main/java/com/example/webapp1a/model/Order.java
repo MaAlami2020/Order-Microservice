@@ -50,7 +50,7 @@ public class Order {
     public Order(){}
 
     public enum State {
-        PENDING, CONFIRMED, DELIVERED, CANCELLED
+        PENDING, CONFIRMED, DELIVERED, CANCELLED;
     }
 
     public void setId(Integer id){

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/bulma.min.css">
+    <link rel="stylesheet" href="/css/material-design-iconic-font.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav class="navbar">
+            <nav class="nav-menu --nav-dark" id="mySidenav">
+                <a class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-light" href="//localhost:8443/">Avenue Fashion</a>
+                <ul class="nav-menu-ul">
+                </ul>
+            </nav>
+        </nav>
+        <nav class="navbar">
+            <header class="nabvar-mobile is-size-5-mobile">
+                <a class="navbar-mobile-link has-text-white" href="#" id="btn-mobile"><i class="zmdi zmdi-menu"></i></a>
+            </header>
+        </nav>
+    </header>
+    <!-- Banner -->
+    <div class="banner banner-second">
+        <div class="container">
+            <div class="columns">
+                <div class="slider" id="slider">
+                    
+                    <div class="button-left">    
+                    </div>
+                    <div class="button-right">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <form action="/orders/{{id}}/state/update" method="post" class="form-control" enctype="multipart/form-data">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-two-fifths-desktop" id="banner-container">
+                    <!--order information-->
+                </div>
+                <div class="column">
+                    <div class="columns is-multiline">
+                        <div class="column is-one-third">
+                            <h2 for="color">Order states:</h2>
+                            <div class="form-control-field" id="state">
+                                {{#states}}
+                                <label><input type="radio" name="state" value="{{.}}" required/> {{.}}</label>
+                                {{/states}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="columns is-multiline">
+                        <div class="column is-full is-marginless">
+                            <button class="btn btn-default btn-outline">save</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- footer -->
+    <footer class="footer">
+        <div class="footer-bar-top">
+            <div class="container">
+                <a class="footer-bar-top-links">2024 Avenue Fashion</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</body>
+<script>
+
+    let ruta='//localhost:8443/api/orders/{{id}}';
+
+    var stock = "";
+    
+
+    function loadOrder(callback){
+        $.ajax({
+            url:ruta
+        }).done(function (order){
+            callback(order);
+        })
+    }    
+
+    function showOrderInfo(order){
+        $('#banner-container').append('<h1>Order</h1><div class="columns"><div class="column"><p class="has-text-dark"><strong class="has-text-grey-light">Code: </strong>' + order.code + '</p><p class="has-text-dark"><strong class="has-text-grey-light">Total cost: </strong>' + order.totalCost + '€</p><p class="has-text-dark"><strong class="has-text-grey-light">Creation date: </strong>' + order.creationDate + '</p><p class="has-text-dark"><strong class="has-text-grey-light">State: </strong>' + order.state +'</p></div></div>'
+        )
+    }
+
+    function showFirstItem(itemToBuy){   
+        if(itemToBuy.items[0].stocks[0].stock >= 5){
+            stock = "In stock"; 
+        } else {
+            stock = "less than 5 items avaialables";
+        }
+        $('.slider').append(
+            '<div class="slider-img-container active" style="min-height: 55vh; min-width: 90vh; display: flex; justify-content: center; align-items: center;">' +
+                '<div class="card">' +
+                    '<div class="columns">' +
+                        '<div class="column is-two-fifths-desktop">' +
+                            '<img src="//localhost:8443/api/items/' + itemToBuy.items[0].id + '/image" alt="camiseta" width="200" height="200">' +
+                        '</div>' +
+                        '<div class="column">' + 
+                            '<h3 class="is-size-4">' + itemToBuy.items[0].name + '</h3>' +
+                            '<h2 class="price is-size-4">' + itemToBuy.items[0].price + '€<sup></sup></h2>' +
+                            '<p class="has-text-grey"><strong>Availability: </strong>' + stock + '</p>' + 
+                            '<p class="has-text-grey"><strong>Gender: </strong>' + itemToBuy.items[0].gender + '</p>' +
+                            '<p class="has-text-grey"><strong>Size: </strong>' + itemToBuy.size + '</p>' + 
+                            '<p class="has-text-grey"><strong>Type: </strong>' + itemToBuy.items[0].type + '</p>' +
+                            '<p class="has-text-grey"><strong>Amount: </strong>' + itemToBuy.count + '</p>' + 
+                            '<p class="text-default">' + itemToBuy.items[0].description + '</p>' +  
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>'
+        )
+    }
+
+    function showOtherItems(itemToBuy){
+        if(itemToBuy.items[0].stocks[0].stock >= 5){
+            stock = "In stock"; 
+        } else {
+            stock = "less than 5 items avaialables";
+        }
+        $('.slider').append(
+            '<div class="slider-img-container" style="min-height: 55vh; min-width: 90vh; display: flex; justify-content: center; align-items: center;">' +
+                '<div class="card">' +
+                    '<div class="columns">' +
+                        '<div class="column is-two-fifths-desktop">' +
+                            '<img src="//localhost:8443/api/items/' + itemToBuy.items[0].id + '/image" alt="camiseta" width="200" height="200">' +
+                        '</div>' +
+                        '<div class="column">' + 
+                            '<h3 class="is-size-4">' + itemToBuy.items[0].name + '</h3>' +
+                            '<h2 class="price is-size-4">' + itemToBuy.items[0].price + '€<sup></sup></h2>' +
+                            '<p class="has-text-grey"><strong>Availability: </strong>' + stock + '</p>' + 
+                            '<p class="has-text-grey"><strong>Gender: </strong>' + itemToBuy.items[0].gender + '</p>' +
+                            '<p class="has-text-grey"><strong>Size: </strong>' + itemToBuy.size + '</p>' + 
+                            '<p class="has-text-grey"><strong>Type: </strong>' + itemToBuy.items[0].type + '</p>' +
+                            '<p class="has-text-grey"><strong>Amount: </strong>' + itemToBuy.count + '</p>' + 
+                            '<p class="text-default">' + itemToBuy.items[0].description + '</p>' +  
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>'
+        )
+    }
+
+    function showPreviousButton(n){
+        $('.button-left').append(
+            '<div class="slider-button-left slider-buttons" onclick="previus(' + n + ')"><i class="zmdi zmdi-chevron-left zmdi-hc-3x"></i></div>'
+        )
+    }
+
+    function showNextButton(n){
+        $('.button-right').append(
+            '<div class="slider-button-right slider-buttons" onclick="next(' + n + ')"><i class="zmdi zmdi-chevron-right zmdi-hc-3x"></i></div>'
+        )
+    }
+
+    $(document).ready(function() {
+
+        loadOrder(function(order) {
+            console.log(order);
+            showOrderInfo(order);
+            showFirstItem(order.itemToBuys[0]);
+            if(order.itemToBuys.length > 1){
+                for(var i=1; i<order.itemToBuys.length; i++){
+                    showOtherItems(order.itemToBuys[i]);
+                }
+            }
+            showPreviousButton(order.itemToBuys.length);
+            showNextButton(order.itemToBuys.length);
+        });
+    });
+</script>
+</html>
