@@ -67,7 +67,7 @@
                 <div class="row">
                     <div class="col-md-9 col-sm-12 col-xs-12">
                         <ul class="orders-founded-pagination">               
-                            <li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results</button></li>
+                            <li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results by code</button></li>
                         </ul>
                     </div>                  
                 </div>
@@ -77,8 +77,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-9 col-sm-12 col-xs-12">
-                        <ul class="orders-date-founded-pagination">               
-                            <li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results</button></li>
+                        <ul class="orders-date-pagination">               
+                            <li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results by date</button></li>
                         </ul>
                     </div>                  
                 </div>
@@ -127,6 +127,8 @@
 </body>
 <script>
     var tam=10;
+    var tam1=1;
+    var tam2=1;
 
     let ruta='//localhost:8445/api/orders?size='+tam;
 
@@ -141,14 +143,14 @@
     function showOrderLoaded(order){
         $('#ordersListing').append(
             '<div class="column is-half-mobile is-one-quarter-desktop"><div class="card"><a href="#"><img src="/img/no_image.png" alt="" width="200" height="200"><div class="card-simple-options"><a href="/orders/'
-            + order.id + '" class="btn btn--mini-rounded"><div class="columns is-multiline"><div class="column is-full is-marginless">VIEW ORDER</div></div></a></div><div class="card-info"></div></a></div></div>'
+            + order.id + '/state" class="btn btn--mini-rounded"><div class="columns is-multiline"><div class="column is-full is-marginless">VIEW ORDER</div></div></a></div><div class="card-info"></div></a></div></div>'
         )
     }
 
     function showOrderFoundedLoaded(order){
         $('#ordersFoundedListing').append(
             '<div class="column is-half-mobile is-one-quarter-desktop"><div class="card"><a href="#"><img src="/img/no_image.png" alt="" width="200" height="200"><div class="card-simple-options"><a href="/orders/'
-            + order.id + '" class="btn btn--mini-rounded"><div class="columns is-multiline"><div class="column is-full is-marginless">VIEW ORDER</div></div></a></div><div class="card-info"></div></a></div></div>'
+            + order.id + '/state" class="btn btn--mini-rounded"><div class="columns is-multiline"><div class="column is-full is-marginless">VIEW ORDER</div></div></a></div><div class="card-info"></div></a></div></div>'
         )
     }
 
@@ -191,9 +193,8 @@
 
             $('#spinner-div').show();
             $.ajax({
-                url:'https://localhost:8445/api/orders/'+value+'?size=1'
+                url:'https://localhost:8445/api/orders/'+value+'?size='+tam1
             }).done(function(orders){
-                console.log(orders);
                 $('#spinner-div').hide();
                 $('#total-orders-founded').append('Found <span>' + orders.totalElements + ' orders </span>');
                 if(orders.numberOfElements != 0){
@@ -211,12 +212,11 @@
             $('#ordersFoundedListing').empty();
             let value = $('#name1').val();
             
-            let ruta = 'https://localhost:8445/api/orders/date/'+ value + '?size=1';
+            let ruta = 'https://localhost:8445/api/orders/date/'+ value + '?size='+tam2;
             $('#spinner-div').show();
             $.ajax({
                 url:ruta
             }).done(function(orders){
-                console.log(orders);
                 $('#spinner-div').hide();
                 $('#total-orders-founded').append('Found <span>' + orders.totalElements + ' orders </span>');
                 if(orders.numberOfElements != 0){
@@ -238,7 +238,7 @@
                 url:ruta
             }).done(function(orders){
                 $('#spinner-div').hide();
-                if(orders.numberOfElements != 0 && tam1-2 < orders.numberOfElements){
+                if(value != "" && orders.numberOfElements != 0 && tam1-2 < orders.numberOfElements){
                     for(var i=tam1-2; i<orders.numberOfElements; i++){
                         showOrderFoundedLoaded(orders.content[i]);
                     }
@@ -246,24 +246,23 @@
             })
         })
 
-        $('.orders-date-founded-pagination').click(function() {
-        tam1+=2;
-        let value= $('#name').val();
-        let ruta='https://localhost:8445/api/orders/date'+value+'?size='+tam1;
+        $('.orders-date-pagination').click(function() {
+            tam2+=2;
+            let value= $('#name1').val();
+            let ruta='https://localhost:8445/api/orders/date/'+value+'?size='+tam2;
 
-        $('#spinner-div').show();
-        $.ajax({
-            url:ruta
-        }).done(function(orders){
-            $('#spinner-div').hide();
-            if(orders.numberOfElements != 0 && tam1-2 < orders.numberOfElements){
-                for(var i=tam1-2; i<orders.numberOfElements; i++){
-                    showOrderFoundedLoaded(orders.content[i]);
+            $('#spinner-div').show();
+            $.ajax({
+                url:ruta
+            }).done(function(orders){
+                $('#spinner-div').hide();
+                if(value != "" && orders.numberOfElements != 0 && tam2-2 < orders.numberOfElements){
+                    for(var i=tam2-2; i<orders.numberOfElements; i++){
+                        showOrderFoundedLoaded(orders.content[i]);
+                    }
                 }
-            }
+            })
         })
-    })
-
     });
 
 </script>
