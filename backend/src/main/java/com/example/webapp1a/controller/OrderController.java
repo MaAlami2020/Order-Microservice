@@ -73,7 +73,7 @@ public class OrderController {
             model.addAttribute("states", State.values());
             return "orderStatus";
         } else {
-            return "error";
+            return "//localhost:8443/error";
         }
     }
     
