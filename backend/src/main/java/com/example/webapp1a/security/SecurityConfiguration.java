@@ -1,21 +1,18 @@
 package com.example.webapp1a.security;
 
-import java.security.SecureRandom;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
@@ -51,27 +48,20 @@ public class SecurityConfiguration{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        return http
+        http
             .csrf().disable()
-            .formLogin(httpForm -> {
-                httpForm.loginPage("/login").permitAll();
-                httpForm.defaultSuccessUrl("/");
-                httpForm.usernameParameter("username");
-                httpForm.passwordParameter("password"); 
-                httpForm.failureUrl("/error");
-            })
 
             .authorizeHttpRequests(registry -> {
-                registry.antMatchers("/").permitAll();
-                registry.antMatchers("/orders/page").permitAll();
-            })
-
-            .logout(httpLogout -> {
-                httpLogout.logoutUrl("/logout").permitAll();
-                httpLogout.logoutSuccessUrl("/");
-            })
+                registry.antMatchers("/orders/users/{id}").hasAnyRole("USER");
+                registry.antMatchers("/orders/admin").hasAnyRole("ADMIN");
+                registry.antMatchers("/orders/{id}").hasAnyRole("USER");
+                registry.antMatchers("/orders/{id}/state").hasAnyRole("ADMIN");
+                registry.antMatchers("/orders/{id}/state/update").hasAnyRole("ADMIN");
+            });
             
-            .build();
+        http.headers(header -> header.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "*")));
+            
+        return http.build();
     }
 
     public void addCorsMapping(CorsRegistry registry){
