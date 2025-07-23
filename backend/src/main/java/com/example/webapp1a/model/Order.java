@@ -1,6 +1,5 @@
 package com.example.webapp1a.model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
