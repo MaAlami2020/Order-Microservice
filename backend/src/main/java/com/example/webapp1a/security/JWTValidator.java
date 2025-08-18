@@ -1,32 +1,13 @@
 package com.example.webapp1a.security;
 
-import java.util.Date;
-
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
-public class JWTGenerator {
-
-    public String generateToken(Authentication authentication){
-        String username = authentication.getName();
-        Date currentDate = new Date();
-        Date expirationDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
-
-        String token = Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SECRET)
-                .compact();
-        return token;
-    }
+public class JWTValidator {
 
     public String getUsernameFromJWT(String token){
         Claims claims = Jwts.parser()
@@ -44,5 +25,6 @@ public class JWTGenerator {
             throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
         }
     }
+    
     
 }

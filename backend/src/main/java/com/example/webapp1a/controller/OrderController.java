@@ -1,17 +1,23 @@
 package com.example.webapp1a.controller;
 
+import java.security.Principal;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.webapp1a.model.Order;
+import com.example.webapp1a.model.User;
 import com.example.webapp1a.model.Order.State;
 import com.example.webapp1a.service.OrderService;
+import com.example.webapp1a.service.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -19,7 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
-@RequestMapping("/orders")
+@RequestMapping("orders")
 public class OrderController {
 
     @Autowired
@@ -43,8 +49,7 @@ public class OrderController {
      * @param model
      * @return page in which the details of an order of a particular user is shown
      */
-    
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/detail")
     public String getOrderDetail(Model model, @PathVariable Integer id){
         return "order";
     }
@@ -54,7 +59,6 @@ public class OrderController {
         model.addAttribute("states", State.values());
         return "orderStatus";
     }
-
 
     @GetMapping("/{i}/admin")
     public String getOrderDetailAdmin(Model model, @PathVariable Integer id){
@@ -71,10 +75,9 @@ public class OrderController {
             }
             orderService.save(oldOrder.get());
             model.addAttribute("states", State.values());
-            return "orderStatus";
+            return "redirect://localhost:8442/order/orders/" + id + "/state";
         } else {
-            return "//localhost:8443/error";
+            return "redirect://localhost:8442/store/loginerror";
         }
-    }
-    
+    } 
 }

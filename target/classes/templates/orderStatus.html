@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar">
             <nav class="nav-menu --nav-dark" id="mySidenav">
-                <a class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-light" href="//localhost:8443/">Avenue Fashion</a>
+                <a class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-light" href="/order/orders/admin">Avenue Fashion</a>
                 <ul class="nav-menu-ul">
                 </ul>
             </nav>
@@ -44,7 +44,7 @@
 
 
     
-    <form action="/orders/{{id}}/state/update" method="post" class="form-control" enctype="multipart/form-data">
+    <form action="/order/orders/{{id}}/state/update" method="post" class="form-control" enctype="multipart/form-data">
         <div class="container">
             <div class="columns">
                 <div class="column is-two-fifths-desktop" id="banner-container">
@@ -85,7 +85,7 @@
 </body>
 <script>
 
-    let ruta='//localhost:8443/api/orders/{{id}}';
+    let ruta='/store/orders/{{id}}';
 
     var stock = "";
     

@@ -23,8 +23,10 @@
             </ul>
         </nav>
         <nav class="navbar">
-            <nav class="nav-menu" id="mySidenav">
-                <li class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark" href="//localhost:8443/">Avenue Fashion</li>
+            <nav class="nav-menu " id="mySidenav">
+                <!--<div class="container">-->
+                <a class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-white" href="/store">Avenue Fashion</a>
+                <!--</div>-->
                 <ul class="nav-menu-ul">
                     <div class="user-img">
                         <img src="//localhost:8443/api/users/6/image" alt="" width="50" height="50"></img>
@@ -51,58 +53,32 @@
         </nav>
     </header>
 
+    <!-- Banner -->
+    <div class="banner banner-second">
+        <div class="container">
+            <div class="columns">
+            </div>
+        </div>
+    </div>
+
     <!-- Sección de fotografías -->
     <div class="container">
 
         <!--order searching-->
         <div class="topbar-filter fw">
-			<p id="total-orders-founded"></p>
-		</div>
+            <p id="total-orders-founded"></p>
+        </div>
         <!--orders listing founded-->
         <div class="columns is-mobile is-multiline" id="ordersFoundedListing">
             <!--orders info founded-->
         </div>
-        <div class="page-single">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-9 col-sm-12 col-xs-12">
-                        <ul class="orders-founded-pagination">               
-                            <li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results by code</button></li>
-                        </ul>
-                    </div>                  
-                </div>
-            </div>
-        </div>
-        <div class="page-single">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-9 col-sm-12 col-xs-12">
-                        <ul class="orders-date-pagination">               
-                            <li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results by date</button></li>
-                        </ul>
-                    </div>                  
-                </div>
-            </div>
-        </div>
 
         <div class="topbar-filter fw">
-			<p id="total-orders"></p>
-		</div>
+            <p id="total-orders"></p>
+        </div>
         <!--orders listing-->
         <div class="columns is-mobile is-multiline" id="ordersListing">
             <!--orders info-->
-        </div>
-        <div class="page-single">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-9 col-sm-12 col-xs-12">
-                        <ul class="pagination">               
-                            <li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results</button></li>
-                        </ul>
-                    </div>
-                    
-                </div>
-            </div>
         </div>
 
     </div>
@@ -126,11 +102,11 @@
     
 </body>
 <script>
-    var tam=10;
+    var tam=1;
     var tam1=1;
     var tam2=1;
 
-    let ruta='//localhost:8445/api/orders?size='+tam;
+    let ruta='/order/orders?size='+tam;
 
     function loadInitOrders(callback,tam){
         $.ajax({
@@ -142,14 +118,14 @@
 
     function showOrderLoaded(order){
         $('#ordersListing').append(
-            '<div class="column is-half-mobile is-one-quarter-desktop"><div class="card"><a href="#"><img src="/img/no_image.png" alt="" width="200" height="200"><div class="card-simple-options"><a href="/orders/'
+            '<div class="column is-half-mobile is-one-quarter-desktop"><div class="card"><a href="#"><img src="/img/no_image.png" alt="" width="200" height="200"><div class="card-simple-options"><a href="/order/orders/'
             + order.id + '/state" class="btn btn--mini-rounded"><div class="columns is-multiline"><div class="column is-full is-marginless">VIEW ORDER</div></div></a></div><div class="card-info"></div></a></div></div>'
         )
     }
 
     function showOrderFoundedLoaded(order){
         $('#ordersFoundedListing').append(
-            '<div class="column is-half-mobile is-one-quarter-desktop"><div class="card"><a href="#"><img src="/img/no_image.png" alt="" width="200" height="200"><div class="card-simple-options"><a href="/orders/'
+            '<div class="column is-half-mobile is-one-quarter-desktop"><div class="card"><a href="#"><img src="/img/no_image.png" alt="" width="200" height="200"><div class="card-simple-options"><a href="/order/orders/'
             + order.id + '/state" class="btn btn--mini-rounded"><div class="columns is-multiline"><div class="column is-full is-marginless">VIEW ORDER</div></div></a></div><div class="card-info"></div></a></div></div>'
         )
     }
@@ -163,6 +139,7 @@
                 for(var i=0; i<orders.numberOfElements; i++){
                     showOrderLoaded(orders.content[i]);
                 }
+                $('#ordersListing').append('<div class="container"><div class="row"><div class="col-md-9 col-sm-12 col-xs-12"><ul class="pagination"><li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark"> more results </button></li></ul></div></div></div>')
             }
         });
 
@@ -170,7 +147,7 @@
         $('.pagination').click(function() {
             tam+=10;
 
-            let ruta='https://localhost:8445/api/orders?size='+tam;
+            let ruta='/order/orders?size='+tam;
 
             $('#spinner-div').show();
             $.ajax({
@@ -193,7 +170,7 @@
 
             $('#spinner-div').show();
             $.ajax({
-                url:'https://localhost:8445/api/orders/'+value+'?size='+tam1
+                url:'/order/orders/'+value+'?size='+tam1
             }).done(function(orders){
                 $('#spinner-div').hide();
                 $('#total-orders-founded').append('Found <span>' + orders.totalElements + ' orders </span>');
@@ -201,8 +178,8 @@
                     for(var i=0; i<orders.numberOfElements; i++){
                         showOrderFoundedLoaded(orders.content[i]);
                     }
+                    $('#ordersFoundedListing').append('<div class="container"><div class="row"><div class="col-md-9 col-sm-12 col-xs-12"><ul class="orders-founded-pagination"><li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results by code</button></li></ul></div></div></div>')
                 }
-                
             }) 
         })
 
@@ -212,7 +189,7 @@
             $('#ordersFoundedListing').empty();
             let value = $('#name1').val();
             
-            let ruta = 'https://localhost:8445/api/orders/date/'+ value + '?size='+tam2;
+            let ruta = '/order/orders/date/'+ value + '?size='+tam2;
             $('#spinner-div').show();
             $.ajax({
                 url:ruta
@@ -223,6 +200,7 @@
                     for(var i=0; i<orders.numberOfElements; i++){
                         showOrderFoundedLoaded(orders.content[i]);
                     }
+                    $('#ordersFoundedListing').append('<div class="container"><div class="row"><div class="col-md-9 col-sm-12 col-xs-12"><ul class="orders-date-pagination"><li><button class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark">more results by date</button></li></ul></div></div></div>')
                 }
                 
             }) 
@@ -231,7 +209,7 @@
         $('.orders-founded-pagination').click(function() {
             tam1+=2;
             let value= $('#name').val();
-            let ruta='https://localhost:8445/api/orders/'+value+'?size='+tam1;
+            let ruta='/order/orders/'+value+'?size='+tam1;
 
             $('#spinner-div').show();
             $.ajax({
@@ -249,7 +227,7 @@
         $('.orders-date-pagination').click(function() {
             tam2+=2;
             let value= $('#name1').val();
-            let ruta='https://localhost:8445/api/orders/date/'+value+'?size='+tam2;
+            let ruta='/order/orders/date/'+value+'?size='+tam2;
 
             $('#spinner-div').show();
             $.ajax({

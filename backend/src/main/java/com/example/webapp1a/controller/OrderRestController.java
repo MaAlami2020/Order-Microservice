@@ -1,5 +1,10 @@
 package com.example.webapp1a.controller;
 
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,30 +16,89 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.webapp1a.model.Order;
+import com.example.webapp1a.model.User;
 import com.example.webapp1a.service.OrderService;
+import com.example.webapp1a.service.UserService;
 
-
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
-@RequestMapping("/api")
 public class OrderRestController {
 
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/orders")
+    @Autowired
+    private UserService userService;
+
+    //LOGGED WITH JWT
+
+    @Operation(summary = "Get orders")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Get orders", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))
+        }),
+        @ApiResponse(responseCode = "404", description = "No order founded", content = @Content)
+    })
+    @GetMapping("/api/orders")
     public ResponseEntity<Page<Order>> getOrders(Pageable page) {
         return new ResponseEntity<>(orderService.findAll(page),HttpStatus.OK);
     }
 
-    @GetMapping("/orders/{name}")
+    @Operation(summary = "Get orders by name")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Get orders by name", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))
+        }),
+        @ApiResponse(responseCode = "404", description = "No order by name founded", content = @Content)
+    })
+    @GetMapping("/api/orders/{name}")
     public ResponseEntity<Page<Order>> getOrderByName(@PathVariable String name, Pageable page) {
         return new ResponseEntity<>(orderService.findByName(name, page), HttpStatus.OK);
     }
     
-    @GetMapping("/orders/date/{name}")
+    @Operation(summary = "Get orders by date")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Get orders by date", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))
+        }),
+        @ApiResponse(responseCode = "404", description = "No order by datefounded", content = @Content)
+    })
+    @GetMapping("/api/orders/date/{name}")
     public ResponseEntity<Page<Order>> getOrderByDate(@PathVariable String name, Pageable page) {
+        return new ResponseEntity<>(orderService.findByDate(name, page), HttpStatus.OK);
+    }
+
+    //LOGGED WITH REDDIS
+
+    @GetMapping("/orders/user")
+    public ResponseEntity<Page<Order>> getOrdersByUser(HttpServletRequest request, Pageable page) {
+        //Optional<User> user = userService.findById(id);
+        String username = (String) request.getSession().getAttribute("user");
+        Optional<User> user = userService.findByUsername(username);
+        if(user.isPresent()) {
+            return new ResponseEntity<>(orderService.findByUser(user.get(),page),HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<Page<Order>> getOrdersReddis(Pageable page) {
+        return new ResponseEntity<>(orderService.findAll(page),HttpStatus.OK);
+    }
+
+    @GetMapping("/orders/{name}")
+    public ResponseEntity<Page<Order>> getOrderByNameReddis(@PathVariable String name, Pageable page) {
+        return new ResponseEntity<>(orderService.findByName(name, page), HttpStatus.OK);
+    }
+    
+    @GetMapping("/orders/date/{name}")
+    public ResponseEntity<Page<Order>> getOrderByDateReddis(@PathVariable String name, Pageable page) {
         return new ResponseEntity<>(orderService.findByDate(name, page), HttpStatus.OK);
     }
 }   
