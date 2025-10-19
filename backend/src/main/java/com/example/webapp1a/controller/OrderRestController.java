@@ -10,8 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +39,27 @@ public class OrderRestController {
     private UserService userService;
 
     //LOGGED WITH JWT
+
+    @Operation(summary = "Post order state")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Update order state", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))
+        }),
+        @ApiResponse(responseCode = "404", description = "No order updated", content = @Content)
+    })
+    @PostMapping("/api/orders/{id}/state/update")
+    public ResponseEntity<String> updateOrderState(Model model, @PathVariable Integer id, @RequestBody Order order) {
+        Optional<Order> oldOrder = orderService.findById(id);
+        if(oldOrder.isPresent()){
+            if(order.getState() != null){
+                oldOrder.get().setState(order.getState());
+            }
+            orderService.save(oldOrder.get());
+            return new ResponseEntity<>("done", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("updating failed", HttpStatus.NOT_FOUND);
+        }
+    }
 
     @Operation(summary = "Get orders")
     @ApiResponses(value = {
@@ -66,7 +90,7 @@ public class OrderRestController {
         @ApiResponse(responseCode = "200", description = "Get orders by date", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))
         }),
-        @ApiResponse(responseCode = "404", description = "No order by datefounded", content = @Content)
+        @ApiResponse(responseCode = "404", description = "No order by date founded", content = @Content)
     })
     @GetMapping("/api/orders/date/{name}")
     public ResponseEntity<Page<Order>> getOrderByDate(@PathVariable String name, Pageable page) {

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-container
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: order-container
+  template:
+    metadata:
+      labels:
+        app: order-container
+    spec:
+      containers:
+      - name: order-container
+        image: maalami/springbootorder
+        ports:
+        - containerPort: 8445
+      nodeSelector:
+        role: backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector:
+    app: order-container
+  ports:
+    - port: 8445
+      targetPort: 8445
+  type: ClusterIP

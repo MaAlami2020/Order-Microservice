@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/bulma.min.css">
-    <link rel="stylesheet" href="/css/material-design-iconic-font.css">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://ab7249eb.onlinestore-5ro.pages.dev/bulma.min.css">
+    <link rel="stylesheet" href="https://ab7249eb.onlinestore-5ro.pages.dev/material-design-iconic-font.css">
+    <link rel="stylesheet" href="https://ab7249eb.onlinestore-5ro.pages.dev/styles.css">
     <title>Avenue Fashion -- SHOW ALL ORDERS</title>
 </head>
 
@@ -29,7 +29,7 @@
                 <!--</div>-->
                 <ul class="nav-menu-ul">
                     <div class="user-img">
-                        <img src="//localhost:8443/api/users/6/image" alt="" width="50" height="50"></img>
+                        <img src="http://localhost:8443/api/users/6/image" alt="" width="50" height="50"></img>
                     </div>
                 </ul>
                 <form>
@@ -97,7 +97,7 @@
             <li class="footer-bar-top-links">2024 Avenue Fashion</li>
         </div>
     </footer>
-    <script src="/js/main.js"></script>
+    <script src="https://a3f7181b.onlinestore-5ro.pages.dev/main.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     
 </body>
@@ -106,7 +106,7 @@
     var tam1=1;
     var tam2=1;
 
-    let ruta='/order/orders?size='+tam;
+    let ruta="/order/orders?size="+tam;
 
     function loadInitOrders(callback,tam){
         $.ajax({
@@ -120,6 +120,7 @@
         $('#ordersListing').append(
             '<div class="column is-half-mobile is-one-quarter-desktop"><div class="card"><a href="#"><img src="/img/no_image.png" alt="" width="200" height="200"><div class="card-simple-options"><a href="/order/orders/'
             + order.id + '/state" class="btn btn--mini-rounded"><div class="columns is-multiline"><div class="column is-full is-marginless">VIEW ORDER</div></div></a></div><div class="card-info"></div></a></div></div>'
+        
         )
     }
 
@@ -147,7 +148,7 @@
         $('.pagination').click(function() {
             tam+=10;
 
-            let ruta='/order/orders?size='+tam;
+            let ruta="/order/orders?size="+tam;
 
             $('#spinner-div').show();
             $.ajax({
@@ -170,7 +171,7 @@
 
             $('#spinner-div').show();
             $.ajax({
-                url:'/order/orders/'+value+'?size='+tam1
+                url:"/order/orders/"+value+"?size="+tam1
             }).done(function(orders){
                 $('#spinner-div').hide();
                 $('#total-orders-founded').append('Found <span>' + orders.totalElements + ' orders </span>');
@@ -189,7 +190,7 @@
             $('#ordersFoundedListing').empty();
             let value = $('#name1').val();
             
-            let ruta = '/order/orders/date/'+ value + '?size='+tam2;
+            let ruta = "/order/orders/date/"+ value + "?size="+tam2;
             $('#spinner-div').show();
             $.ajax({
                 url:ruta
@@ -209,7 +210,7 @@
         $('.orders-founded-pagination').click(function() {
             tam1+=2;
             let value= $('#name').val();
-            let ruta='/order/orders/'+value+'?size='+tam1;
+            let ruta="/order/orders/"+value+"?size="+tam1;
 
             $('#spinner-div').show();
             $.ajax({
@@ -227,7 +228,7 @@
         $('.orders-date-pagination').click(function() {
             tam2+=2;
             let value= $('#name1').val();
-            let ruta='/order/orders/date/'+value+'?size='+tam2;
+            let ruta="/order/orders/date/"+value+"?size="+tam2;
 
             $('#spinner-div').show();
             $.ajax({

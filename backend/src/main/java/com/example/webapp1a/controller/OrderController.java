@@ -60,7 +60,7 @@ public class OrderController {
         return "orderStatus";
     }
 
-    @GetMapping("/{i}/admin")
+    @GetMapping("/{id}/admin")
     public String getOrderDetailAdmin(Model model, @PathVariable Integer id){
         model.addAttribute("updatedOrder","");
         return "orderAdmin";
