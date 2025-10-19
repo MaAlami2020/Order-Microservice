@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.webapp1a.model.Order;
+import com.example.webapp1a.model.User;
 import com.example.webapp1a.repository.OrderRepo;
 
 @Service
@@ -35,6 +36,11 @@ public class OrderService {
     public Page<Order> findByDate(String date, Pageable page){
         return orderRepo.findByDate(date, page);
     }
+
+    public Page<Order> findByUser(User user, Pageable page){
+        return orderRepo.findByUser(user, page);
+    }
+    
     /*public void update(Integer id, Order newOrder){
         Optional<Order> order = orderRepo.findById(id);
 

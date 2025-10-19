@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/bulma.min.css">
-    <link rel="stylesheet" href="/css/material-design-iconic-font.css">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://ab7249eb.onlinestore-5ro.pages.dev/bulma.min.css">
+    <link rel="stylesheet" href="https://ab7249eb.onlinestore-5ro.pages.dev/material-design-iconic-font.css">
+    <link rel="stylesheet" href="https://ab7249eb.onlinestore-5ro.pages.dev/styles.css">
     <title>Document</title>
 </head>
 
@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar">
             <nav class="nav-menu --nav-dark" id="mySidenav">
-                <a class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-light" href="//localhost:8443/">Avenue Fashion</a>
+                <a class="is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-light" href="/order/orders/admin">Avenue Fashion</a>
                 <ul class="nav-menu-ul">
                 </ul>
             </nav>
@@ -44,7 +44,7 @@
 
 
     
-    <form action="/orders/{{id}}/state/update" method="post" class="form-control" enctype="multipart/form-data">
+    <form action="/order/orders/{{id}}/state/update" method="post" class="form-control" enctype="multipart/form-data">
         <div class="container">
             <div class="columns">
                 <div class="column is-two-fifths-desktop" id="banner-container">
@@ -80,12 +80,12 @@
         </div>
     </footer>
 
-    <script src="/js/main.js"></script>
+    <script src="https://a3f7181b.onlinestore-5ro.pages.dev/main.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </body>
 <script>
 
-    let ruta='//localhost:8443/api/orders/{{id}}';
+    let ruta="/store/orders/{{id}}";
 
     var stock = "";
     
@@ -110,16 +110,16 @@
             stock = "less than 5 items avaialables";
         }
         $('.slider').append(
-            '<div class="slider-img-container active" style="min-height: 55vh; min-width: 90vh; display: flex; justify-content: center; align-items: center;">' +
+            '<div *ngIf="itemToBuy" class="slider-img-container active" style="min-height: 55vh; min-width: 90vh; display: flex; justify-content: center; align-items: center;">' +
                 '<div class="card">' +
                     '<div class="columns">' +
                         '<div class="column is-two-fifths-desktop">' +
-                            '<img src="//localhost:8443/api/items/' + itemToBuy.items[0].id + '/image" alt="camiseta" width="200" height="200">' +
+                            '<img [src]="itemImage(itemToBuy.items[0].id)" alt="camiseta" width="200" height="200">' +
                         '</div>' +
                         '<div class="column">' + 
                             '<h3 class="is-size-4">' + itemToBuy.items[0].name + '</h3>' +
                             '<h2 class="price is-size-4">' + itemToBuy.items[0].price + '€<sup></sup></h2>' +
-                            '<p class="has-text-grey"><strong>Availability: </strong>' + stock + '</p>' + 
+                            '<p class="has-text-grey"><strong>Availability: </strong>' + stock + '</p>' +
                             '<p class="has-text-grey"><strong>Gender: </strong>' + itemToBuy.items[0].gender + '</p>' +
                             '<p class="has-text-grey"><strong>Size: </strong>' + itemToBuy.size + '</p>' + 
                             '<p class="has-text-grey"><strong>Type: </strong>' + itemToBuy.items[0].type + '</p>' +
@@ -139,16 +139,16 @@
             stock = "less than 5 items avaialables";
         }
         $('.slider').append(
-            '<div class="slider-img-container" style="min-height: 55vh; min-width: 90vh; display: flex; justify-content: center; align-items: center;">' +
+            '<div *ngFor="let itemToBuy of itemsToBuy" class="slider-img-container" style="min-height: 55vh; min-width: 90vh; display: flex; justify-content: center; align-items: center;">' +
                 '<div class="card">' +
                     '<div class="columns">' +
                         '<div class="column is-two-fifths-desktop">' +
-                            '<img src="//localhost:8443/api/items/' + itemToBuy.items[0].id + '/image" alt="camiseta" width="200" height="200">' +
+                            '<img [src]="itemImage(itemToBuy.items[0].id)" alt="camiseta" width="200" height="200">' +
                         '</div>' +
                         '<div class="column">' + 
                             '<h3 class="is-size-4">' + itemToBuy.items[0].name + '</h3>' +
                             '<h2 class="price is-size-4">' + itemToBuy.items[0].price + '€<sup></sup></h2>' +
-                            '<p class="has-text-grey"><strong>Availability: </strong>' + stock + '</p>' + 
+                            '<p class="has-text-grey"><strong>Availability: </strong>' + stock + '</p>' +
                             '<p class="has-text-grey"><strong>Gender: </strong>' + itemToBuy.items[0].gender + '</p>' +
                             '<p class="has-text-grey"><strong>Size: </strong>' + itemToBuy.size + '</p>' + 
                             '<p class="has-text-grey"><strong>Type: </strong>' + itemToBuy.items[0].type + '</p>' +
