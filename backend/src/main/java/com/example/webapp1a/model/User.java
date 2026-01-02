@@ -44,7 +44,7 @@ public class User {
 
 
     @Lob
-    @Column(name = "image")
+    @Column(name = "imageFile")
     private Blob imageField;
 
     @OneToOne(cascade=CascadeType.ALL)
