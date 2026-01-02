@@ -15,6 +15,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tbl_user")
@@ -44,6 +47,8 @@ public class User {
 
 
     @Lob
+    @Transient
+    @JsonIgnore
     @Column(name = "imageFile")
     private Blob imageField;
 
