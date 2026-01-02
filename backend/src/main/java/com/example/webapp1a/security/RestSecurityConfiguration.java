@@ -39,7 +39,7 @@ public class RestSecurityConfiguration{
 
     public void addCorsMapping(CorsRegistry registry){
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8443")
+                .allowedOrigins("http://store-service:8443")
                 .allowCredentials(true);
     }     
 }
