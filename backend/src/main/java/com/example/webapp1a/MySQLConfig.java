@@ -30,9 +30,9 @@ public class MySQLConfig {
     @Bean(name = "itemDataSource")
     public DataSource itemDataSource(){
         return DataSourceBuilder.create().driverClassName("com.mysql.cj.jdbc.Driver")
-                                                        .url("jdbc:mysql://mysqldb2:3306/items")
-                                                        //.url("jdbc:mysql://localhost:3306/items")
-                                                        //.username("root")
+                                                        //.url("jdbc:mysql://mysqldb2:3306/items")
+                                                        .url("jdbc:mysql://localhost:3306/items")
+                                                        .username("root")
                                                         .password("Mundialmente1")
                                                         .build();
     }
