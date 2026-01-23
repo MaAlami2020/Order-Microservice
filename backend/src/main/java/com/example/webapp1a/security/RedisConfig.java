@@ -1,6 +1,6 @@
 package com.example.webapp1a.security;
 
-import org.springframework.context.annotation.Bean;
+/*import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -36,4 +36,4 @@ public class RedisConfig {
 
         return template;
     }
-}
+}*/
