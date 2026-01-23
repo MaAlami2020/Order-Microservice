@@ -57,12 +57,17 @@
         </div>
     </footer>
 
-    <script src="/js/main.js"></script>
+    
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <script src="/js/cliente.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 <script>
 
-    let ruta="/store/orders/{{id}}";
+    let ruta="/order/orders/{{id}}/info";
 
     var stock = "";
     
@@ -76,15 +81,20 @@
     }    
 
     function showOrderInfo(order){
-        $('.banner-container').append('<h1>Order</h1><div class="columns"><div class="column"><p class="has-text-white"><strong class="has-text-grey-light">Code: </strong>' + order.code + '</p><p class="has-text-white"><strong class="has-text-grey-light">Total cost: </strong>' + order.totalCost + '€</p><p class="has-text-white"><strong class="has-text-grey-light">Creation date: </strong>' + order.creationDate + '</p><p class="has-text-white"><strong class="has-text-grey-light">State: </strong>' + order.state +'</p></div></div>'
+        $('.banner-container').append('<h1>Order</h1><div class="columns"><div class="column"><p class="has-text-white"><strong class="has-text-grey-light">Code: </strong>' + order.code + '</p><p class="has-text-white"><strong class="has-text-grey-light">Total cost: </strong>' + order.totalCost + '€</p><p class="has-text-white"><strong class="has-text-grey-light">Creation date: </strong>' + order.creationDate + '</p><p class="has-text-white"><strong class="has-text-grey-light">State: </strong><strong class="has-text-white" id="estado">' + order.state + '</strong></p></div></div>'
         )
     }
 
-    function showFirstItem(itemToBuy){   
-        if(itemToBuy.items[0].stocks[0].stock >= 5){
-            stock = "In stock"; 
-        } else {
-            stock = "less than 5 items avaialables";
+    function showFirstItem(itemToBuy){  
+        console.log(itemToBuy.items[0].stocks[0]); 
+        if(itemToBuy.items[0].stocks[0] == null && itemToBuy.items[0].stocks[0] == undefined)
+            stock = "unlimited";
+        else {
+            if( itemToBuy.items[0].stocks[0].stock >= 5){
+                stock = "In stock"; 
+            } else {
+                stock = "less than 5 items avaialables";
+            }
         }
         $('.slider').append(
             '<div class="slider-img-container active" style="align: center"><div class="column"><div class="card"><img src="/store/api/items/' + itemToBuy.items[0].id + 
@@ -96,10 +106,14 @@
     }
 
     function showOtherItems(itemToBuy){
-        if(itemToBuy.items[0].stocks[0].stock >= 5){
-            stock = "In stock"; 
-        } else {
-            stock = "less than 5 items avaialables";
+        if(itemToBuy.items[0].stocks[0] == null)
+            stock = "out of stock";
+        else {
+            if( itemToBuy.items[0].stocks[0].stock >= 5){
+                stock = "In stock"; 
+            } else {
+                stock = "less than 5 items avaialables";
+            }
         }
         $('.slider').append(
             '<div class="slider-img-container"><div class="column"><div class="card"><img src="/store/api/items/' + itemToBuy.items[0].id + 
@@ -112,7 +126,7 @@
 
     function showPreviousButton(n){
         $('.button-left').append(
-            '<div class="slider-button-left slider-buttons" onclick="previus(' + n + ')"><i class="zmdi zmdi-chevron-left zmdi-hc-3x"></i></div>'
+            '<div class="slider-button-left slider-buttons" onclick="previous(' + n + ')"><i class="zmdi zmdi-chevron-left zmdi-hc-3x"></i></div>'
         )
     }
 
@@ -126,6 +140,23 @@
 
         loadOrder(function(order) {
             console.log(order);
+            //$('#estado').append(order.state);
+            const socket = new SockJS('/order/ws-pedidos');
+            const stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, function () {
+
+                console.log("Conectado al pedido", order.id);
+
+                stompClient.subscribe('/topic/pedidos/' + order.id, function (message) {
+
+                    const pedido = JSON.parse(message.body);
+                    //document.getElementById('estado').innerText = pedido.estado;
+                    console.log("pedido: ",pedido);
+                    $('#estado').empty();
+                    $('#estado').append(pedido.state);
+                });
+            });
             showOrderInfo(order);
             showFirstItem(order.itemToBuys[0]);
             if(order.itemToBuys.length > 1){

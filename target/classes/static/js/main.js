@@ -43,7 +43,6 @@ function slider(n) {
         if (images[i].className.includes("active")) {
             images[i].className = images[i].className.replace("active", "")
 
-            break
         }
     }
 
@@ -52,17 +51,20 @@ function slider(n) {
 }
 
 function next(n) {
+    console.log(activeImg);
     activeImg++
+    console.log(n);
     if (activeImg >= n) {
         activeImg = 0
     }
     slider(activeImg)
 }
 
-function previus(n) {
+function previous(n) {
+    console.log("previus");
     activeImg--
-    if (activeImg <= 0) {
-        activeImg = 0
+    if (activeImg < 0) {
+        activeImg = n-1
     }
     slider(activeImg)
 }

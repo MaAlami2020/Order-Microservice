@@ -1,0 +1,20 @@
+version: "3.9"
+services: 
+  web:
+    build: .
+    image: maalami/springbootorder:latest
+    ports:
+      - 8445:8445
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/items
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Mundialmente1
+    restart: always
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0.33
+    environment:
+      - MYSQL_ROOT_PASSWORD=Mundialmente1
+      - MYSQL_DATABASE=items
+      - MYSQL_PASSWORD=Mundialmente1

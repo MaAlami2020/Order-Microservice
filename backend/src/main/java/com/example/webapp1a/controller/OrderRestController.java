@@ -2,9 +2,6 @@ package com.example.webapp1a.controller;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.webapp1a.model.Order;
 import com.example.webapp1a.model.User;
@@ -73,6 +70,30 @@ public class OrderRestController {
         return new ResponseEntity<>(orderService.findAll(page),HttpStatus.OK);
     }
 
+    @Operation(summary = "Get an order by id")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Get an order by id", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))
+        }),
+        @ApiResponse(responseCode = "404", description = "No order founded", content = @Content)
+    })
+    @GetMapping("/api/orders/{ident}/info")
+    public ResponseEntity<Order> getOrderById(@PathVariable Integer ident) {
+        Optional<Order> order = orderService.findById(ident);
+
+        if(order.isPresent()) {
+            return ResponseEntity.ok(order.get());
+        } 
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/api/orders/{id}/timeout")
+    public Order getTOrderById(@PathVariable Integer id) throws InterruptedException {
+        Thread.sleep(7000);
+        return orderService.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
     @Operation(summary = "Get orders by name")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Get orders by name", content = {
@@ -99,11 +120,9 @@ public class OrderRestController {
 
     //LOGGED WITH REDDIS
 
-    @GetMapping("/orders/user")
-    public ResponseEntity<Page<Order>> getOrdersByUser(HttpServletRequest request, Pageable page) {
-        //Optional<User> user = userService.findById(id);
-        String username = (String) request.getSession().getAttribute("user");
-        Optional<User> user = userService.findByUsername(username);
+    @GetMapping("/users/{id}/orders")
+    public ResponseEntity<Page<Order>> getOrdersByUser(@PathVariable Integer id, Pageable page) {
+        Optional<User> user = userService.findById(id);
         if(user.isPresent()) {
             return new ResponseEntity<>(orderService.findByUser(user.get(),page),HttpStatus.OK);
         } else {

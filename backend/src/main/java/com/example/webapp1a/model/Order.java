@@ -41,18 +41,17 @@ public class Order {
     private Double totalCost;
 
     @Column(name="date")
-    private String creationDate;
+    private String creationDate;//AAAA-MM-DD
 
-    @Enumerated(EnumType.STRING)
     @Column(name="state")
-    private State state;
+    private String state;
 
     //private String auxState;
 
     public Order(){}
 
     public enum State {
-        PENDING, CONFIRMED, DELIVERED, CANCELLED;
+        PENDING, CONFIRMED, DELIVERED, CANCELLED
     }
 
     public void setId(Integer id){
@@ -109,11 +108,11 @@ public class Order {
         return creationDate;
     }
 
-    public void setState(State state){
+    public void setState(String state){
         this.state = state;
     }
 
-    public State getState(){
+    public String getState(){
         return state;
     }
 }

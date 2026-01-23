@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/bulma.min.css">
     <link rel="stylesheet" href="/css/material-design-iconic-font.css">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/order/css/styles.css">
     <title>Document</title>
 </head>
 
@@ -80,7 +80,7 @@
         </div>
     </footer>
 
-    <script src="/js/main.js"></script>
+    <script src="/order/js/main.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </body>
 <script>
@@ -103,18 +103,18 @@
         )
     }
 
-    function showFirstItem(itemToBuy){   
-        if(itemToBuy.items[0].stocks[0].stock >= 5){
+    function showFirstItem(itemToBuy){  
+        if(itemToBuy.items[0].stocks[0] == undefined || itemToBuy.items[0].stocks[0].stock >= 5){
             stock = "In stock"; 
         } else {
             stock = "less than 5 items avaialables";
         }
         $('.slider').append(
-            '<div *ngIf="itemToBuy" class="slider-img-container active" style="min-height: 55vh; min-width: 90vh; display: flex; justify-content: center; align-items: center;">' +
+            '<div class="slider-img-container active" style="align-items: center">' +
                 '<div class="card">' +
                     '<div class="columns">' +
                         '<div class="column is-two-fifths-desktop">' +
-                            '<img [src]="itemImage(itemToBuy.items[0].id)" alt="camiseta" width="200" height="200">' +
+                            '<img src="/store/api/items/' + itemToBuy.items[0].id + '/image" alt="camiseta" width="200" height="200">' +
                         '</div>' +
                         '<div class="column">' + 
                             '<h3 class="is-size-4">' + itemToBuy.items[0].name + '</h3>' +
@@ -133,17 +133,17 @@
     }
 
     function showOtherItems(itemToBuy){
-        if(itemToBuy.items[0].stocks[0].stock >= 5){
+        if(itemToBuy.items[0].stocks[0] == undefined || itemToBuy.items[0].stocks[0].stock >= 5){
             stock = "In stock"; 
         } else {
             stock = "less than 5 items avaialables";
         }
         $('.slider').append(
-            '<div *ngFor="let itemToBuy of itemsToBuy" class="slider-img-container" style="min-height: 55vh; min-width: 90vh; display: flex; justify-content: center; align-items: center;">' +
+            '<div class="slider-img-container" style="align-items: center">' +
                 '<div class="card">' +
                     '<div class="columns">' +
                         '<div class="column is-two-fifths-desktop">' +
-                            '<img [src]="itemImage(itemToBuy.items[0].id)" alt="camiseta" width="200" height="200">' +
+                            '<img src="/store/api/items/' + itemToBuy.items[0].id + '/image" alt="camiseta" width="200" height="200">' +
                         '</div>' +
                         '<div class="column">' + 
                             '<h3 class="is-size-4">' + itemToBuy.items[0].name + '</h3>' +
@@ -163,7 +163,7 @@
 
     function showPreviousButton(n){
         $('.button-left').append(
-            '<div class="slider-button-left slider-buttons" onclick="previus(' + n + ')"><i class="zmdi zmdi-chevron-left zmdi-hc-3x"></i></div>'
+            '<div class="slider-button-left slider-buttons" onclick="previous(' + n + ')"><i class="zmdi zmdi-chevron-left zmdi-hc-3x"></i></div>'
         )
     }
 
@@ -184,6 +184,7 @@
                     showOtherItems(order.itemToBuys[i]);
                 }
             }
+            console.log(order.itemToBuys.length);
             showPreviousButton(order.itemToBuys.length);
             showNextButton(order.itemToBuys.length);
         });
