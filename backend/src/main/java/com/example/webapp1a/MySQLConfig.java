@@ -1,6 +1,6 @@
 package com.example.webapp1a;
 
-import java.util.HashMap;
+/*import java.util.HashMap;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -63,4 +63,4 @@ public class MySQLConfig {
 
         return transactionManager;
     }
-}
+}*/
